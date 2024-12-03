@@ -1,8 +1,10 @@
- .letterDisplay {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-    border: 1px solid gray;
-    width: 3em;
-    height: 3em;
- }
+.letterDisplay {
+  font-size: large;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid gray;
+  width: 3em;
+  height: 3em;
+}
