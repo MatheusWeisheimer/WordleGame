@@ -35,6 +35,28 @@ function App() {
     return collorArr
   }
 
+  function newGame() {
+    setApiWord(null)
+    setCurrentWord(["", "", "", "", ""])
+    setCurrentIndex(0)
+    setPrevWordsArr([])
+    setGameIsOver(false)
+    fetchData()
+  }
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://random-word-api.herokuapp.com/word?length=5');
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      const result = await response.json()
+      setApiWord(result[0])
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+  
   const updateCurrentWord = useCallback((input) => {
     if (ALPHABET.includes(input)) {
       const newWord = currentWord.map((char, i) => (
@@ -76,21 +98,8 @@ function App() {
   }, [updateCurrentWord])
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://random-word-api.herokuapp.com/word?length=5');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const result = await response.json();
-        setApiWord(result[0]);
-      } catch (err) {
-        console.log(err.message)
-      }
-    };
-
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   useEffect(() => {
     if (currentIndex === 5) {
@@ -99,15 +108,16 @@ function App() {
   }, [currentIndex, resetWord]);
 
   useEffect(() => {
-    alert(apiWord)
+    console.log(apiWord)
   }, [apiWord])
 
   return (
     <div className="App">
-      {prevWordsArr}
-      {!gameIsOver && <WordDisplay word={currentWord}/>}
+          {apiWord && prevWordsArr}
+          {apiWord && !gameIsOver && <WordDisplay word={currentWord}/>}
+          {gameIsOver && <button className="resetBtn" onClick={newGame}>RESET</button>}
     </div>
-  );
+  )
 }
 
 export default App;
